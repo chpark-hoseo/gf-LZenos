@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include <SDL2/SDL.h>
-
 
 Game::Game()
 {
@@ -9,6 +7,8 @@ Game::Game()
 	_renderer = nullptr;
 	
 	_isRunning = false;
+
+	_texture = nullptr;
 }
 Game::~Game()
 {
@@ -43,24 +43,34 @@ bool Game::Init(const char* title, int x_pos, int y_pos, int width, int height, 
 		}
 		else
 			return false;
-
-		_isRunning = true;
 	}
-	
-	return _isRunning;
-}
 
+
+	SDL_Surface* temp_surface = SDL_LoadBMP("Assets/rider.bmp");
+	if (!temp_surface)
+		return false;
+	_texture = SDL_CreateTextureFromSurface(_renderer, temp_surface);
+	SDL_FreeSurface(temp_surface);
+
+	SDL_QueryTexture(_texture, NULL, NULL, &_sourceRect.w, &_sourceRect.h);
+	_targetRect.w = _sourceRect.w;
+	_targetRect.h = _sourceRect.h;
+	_targetRect.x = _sourceRect.x = 0;
+	_targetRect.y = _sourceRect.y = 0;
+	
+	_isRunning = true;
+	return true;
+}
 void Game::Update()
 {
 
 }
-
 void Game::Render()
 {
 	SDL_RenderClear(_renderer);
+	SDL_RenderCopy(_renderer, _texture, &_sourceRect, &_targetRect);
 	SDL_RenderPresent(_renderer);
 }
-
 
 bool Game::IsRunning() const
 {

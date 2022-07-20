@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../include/main.h"
+
+
 class Game
 {
 private:
@@ -7,6 +10,11 @@ private:
 	class SDL_Renderer* _renderer;
 
 	bool _isRunning;
+
+	class SDL_Texture* _texture;
+
+	SDL_Rect _sourceRect;
+	SDL_Rect _targetRect;
 
 public:
 	Game();
