@@ -1,36 +1,21 @@
 ﻿#include <SDL2/SDL.h>
 
-
-SDL_Window* g_pWindow = 0;
-SDL_Renderer* g_pRenderer = 0;
+#include "Game.h"
 
 
 int main(int argc, char* args[])
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0)
-	{
-		g_pWindow = SDL_CreateWindow(
-			"SDL Begin",
-			SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED,
-			800, 600,
-			SDL_WINDOW_SHOWN
-		);
+	Game* game = new Game();
 
-		if (g_pWindow != 0)
-			g_pRenderer = SDL_CreateRenderer(g_pWindow, -1, 0);
-	}
-	else
+	bool _isRunning = game->Init("K-Move SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+
+	while (_isRunning)
 	{
-		return 1;
+		game->Update();
+		game->Render();
 	}
 
-	SDL_SetRenderDrawColor(g_pRenderer, 0, 0, 0, 255);
-	SDL_RenderClear(g_pRenderer);
-	SDL_RenderPresent(g_pRenderer);
-
-	SDL_Delay(5000);
-	SDL_Quit();
+	delete game;
 
 	return 0;
 }
